@@ -1,8 +1,178 @@
+/*
+Colors
+Dark: 2C302E;
+Medium: 474A48;
+Light: 909590;
+White: FDFDFF;
+Light Green: 9AE19D;
+Dark Green: 537A5A;
+Tan: dcb29c;
+Yellow: f8cf6a;
+*/
+
+/*Custom scrollbar*/
+
+
+body {
+	max-width: 100vw;
+	font-family: 'Nunito', sans-serif;
+	overflow-x: hidden;
+	margin: 0;
+	padding: 0;
+	color: #2C302E;
+}
+
 .App {
   font-family: sans-serif;
   text-align: center;
+  width: 100%;
 }
 
 .display-inline {
   display: inline;
+}
+
+.home-page {
+	padding: 3vh 20vw;
+}
+
+.home-page h1 {
+	text-align: center;
+}
+
+.home-page p {
+	text-align: center;
+}
+
+.generate-page {
+	padding: 20px;
+}
+
+.content-editable {
+	display: inline-block;
+	min-width: 1rem;
+}
+
+.dropdown {
+	display: inline-block;
+}
+
+.edit-page {
+	background-color: blue;
+}
+
+.navbar {
+	padding: 20px;
+	background-color: #9AE19D;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.navbar .icon-title {
+	display: flex;
+	align-items: center;
+	margin: 0;
+	padding: 0;
+}
+
+.navbar .icon-title {
+	color: #2C302E !important;
+	text-decoration: none;
+
+}
+
+.navbar img {
+	height: 2rem;
+}
+
+.navbar .icon-title h3 {
+	margin: 0;
+	margin-left: 1rem;
+}
+
+.navbar .links {
+	display: flex;
+	justify-content: space-between;
+	width: 50%;
+}
+
+.navbar .links a {
+	color: #2C302E;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.navbar .links a:hover {
+	color: #537A5A !important;
+}
+
+.main-content {
+	margin: 20px;
+}
+
+.footer {
+	background: #2C302E;
+	color: #FDFDFF;
+	margin: 0;
+	padding: 5%;
+}
+
+.footer .scaling-grid {
+	display: grid;
+	grid-template-columns: 35% 10% 35%;
+	grid-column-gap: 10%;
+	align-items: center;
+}
+
+.footer .scaling-grid img {
+	width: 100%;
+}
+
+.footer .scaling-grid .links {
+	display: flex;
+	justify-content: space-between;
+}
+
+.footer .links a {
+	color: #FDFDFF;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.footer .links a:hover {
+	color: #9AE19D !important;
+}
+
+.footer .links a:active {
+	color: #537A5A !important;
+}
+
+.footer .links a:visited {
+	color: #dcb29c;
+}
+
+.footer .copyright {
+	margin-top: 6vh;
+	text-align: center;
+}
+
+.footer .footer-title {
+	text-align: right;
+	margin-bottom: 4vh;
+}
+
+a {
+	color: #537A5A;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+a:hover {
+	color: #9AE19D !important;
+}
+
+
+button {
+
 }
