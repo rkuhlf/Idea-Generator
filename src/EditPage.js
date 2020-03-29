@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import {Link} from "react-router-dom";
-import {browserHistory} from "react-router";
 
 
 // button somewhere to allow you to edit other lists
@@ -191,7 +189,7 @@ class EditPage extends Component {
 
   render() {
     return (
-      <div>
+      <div className="edit-page">
         <div>
           <h2>Edit Different List</h2>
           <select value={this.state.currentName} onChange={this.handleDropDownSelect}>

@@ -23,6 +23,7 @@ class GeneratePage extends Component {
       "This is your sentence. LIST You can edit it and add a random item from the list by clicking the add button to the side or by pressing ctrl-b.";
 
     this.generate = this.generate.bind(this);
+    this.addList = this.addList.bind(this);
     this.handleContentEdited = this.handleContentEdited.bind(this);
   }
 
@@ -30,6 +31,12 @@ class GeneratePage extends Component {
     this.setState(prevState => ({
       alternator: !prevState.alternator
     }));
+  }
+
+  addList() {
+    this.setState(prevState => ({
+      text: prevState.text + "LIST"
+    }))
   }
 
   handleContentEdited(newText, index) {
@@ -49,19 +56,20 @@ class GeneratePage extends Component {
     let texts = this.state.text.split("LIST");
     console.log("rerendering");
     return (
-      <div>
+      <div className="generate-page">
         <div>
           {texts.map((text, index) => (
-            <div className="display-inline">
+            <div key={index} className="display-inline">
               <ContentEditable
                 onChange={e => this.handleContentEdited(e.target.value, index)}
                 html={text}
               />
-              {index !== texts.length - 1 ? <ListDropdown /> : null}
+              {index !== texts.length - 1 ? <ListDropdown alternator={this.state.alternator}/> : null}
             </div>
           ))}
         </div>
-        <button>Generate</button>
+        <button onClick={this.generate}>Generate</button>
+        <button onClick={this.addList}>Add</button>
       </div>
     );
   }

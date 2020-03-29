@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 class HomePage extends Component {
   render() {
     return (
-      <div>
+      <div className="home-page">
         <h1>Idea Generator</h1>
 
         <p>

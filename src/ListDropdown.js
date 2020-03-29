@@ -23,21 +23,31 @@ class ListDropdown extends Component {
     if (listNames !== null) {
       listNames = JSON.parse(listNames);
       this.state.listChoices = listNames;
+      this.state.chosen = listNames[0];
+      let storedItems = localStorage.getItem(listNames[0]);
+      storedItems = JSON.parse(storedItems);
+      this.state.chosenItems = storedItems;
     }
 
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(e) {
+    let newChosen = e.target.value;
+
     this.setState(() => {
-      let storedItems = localStorage.getItem(e.target.value);
+      let storedItems = localStorage.getItem(newChosen);
       storedItems = JSON.parse(storedItems);
 
       return {
-        chosen: e.target.value,
+        chosen: newChosen,
         chosenItems: storedItems
       };
     });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.alternator !== this.props.alternator || nextState.chosen !== this.state.chosen;
   }
 
   getRandomItem() {
@@ -47,11 +57,11 @@ class ListDropdown extends Component {
 
   render() {
     return (
-      <div>
+      <div className="dropdown">
         {this.getRandomItem()}
-        <select onChange={this.handleChange}>
+        <select value={this.state.chosen} onChange={this.handleChange}>
           {this.state.listChoices.map(name => (
-            <option value={name}>{name}</option>
+            <option key={name} value={name}>{name}</option>
           ))}
         </select>
       </div>
