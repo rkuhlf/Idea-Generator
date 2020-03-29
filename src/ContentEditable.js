@@ -2,7 +2,6 @@
 // change reactdom findnode to ref?
 
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 
 class ContentEditable extends Component {
   constructor(props) {

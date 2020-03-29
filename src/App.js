@@ -14,9 +14,7 @@ export default function App() {
     <Router>
       {/*Navbar*/}
       <Switch>
-        <Route path="/edit">
-          <EditPage />
-        </Route>
+        <Route path="/edit" component={EditPage} />
         <Route path="/generate">
           <GeneratePage />
         </Route>

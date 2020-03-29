@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import {Link} from "react-router-dom";
+import {browserHistory} from "react-router";
+
 
 // button somewhere to allow you to edit other lists
 
@@ -11,28 +14,50 @@ class EditPage extends Component {
   constructor(props) {
     super(props);
 
-    const loc = window.location.href;
-    const listName = loc.substring(loc.indexOf("?") + 1);
-
     this.state = {
       currentName: "",
       currentList: [],
       listNames: []
     };
 
-    let listInfo = localStorage.getItem(listName);
-    if (listInfo !== null) {
-      listInfo = JSON.parse(listInfo);
-      this.state.currentName = listInfo.name;
-      this.state.currentList = listInfo.items;
-    } else {
-      this.state.currentName = "New List";
-    }
-    this.state.listNames = JSON.parse(localStorage.getItem("listNames"));
+    this.getInfoFromURL();
 
     this.handleNameChange = this.handleNameChange.bind(this);
     this.addItem = this.addItem.bind(this);
     this.editList = this.editList.bind(this);
+    this.handleDropDownSelect = this.handleDropDownSelect.bind(this);
+    this.deleteCurrent = this.deleteCurrent.bind(this);
+  }
+
+  getInfoFromURL() {
+    const loc = window.location.href;
+    let listName = loc.substring(loc.lastIndexOf("/") + 1);
+    console.log(listName);
+    listName = listName.replace("%20", " ");
+
+    let listItems = localStorage.getItem(listName);
+    console.log(listItems)
+    if (listItems !== null) {
+
+      listItems = JSON.parse(listItems);
+      this.state.currentList = listItems;
+    } else {
+      // this is a new list
+      this.state.currentList = [];
+    }
+
+    this.state.currentName = listName;
+
+
+    let listNamesRaw = localStorage.getItem("listNames");
+    if (listNamesRaw !== null) {
+      console.log(listNamesRaw)
+      try {
+        this.state.listNames = JSON.parse(listNamesRaw);
+      } catch {
+        console.log("List Names unparsable");
+      }
+    }
   }
 
   // separate function to update local storage for more DRY
@@ -40,23 +65,32 @@ class EditPage extends Component {
     // Update the list of list names
     // go through the list of list names
     let names = localStorage.getItem("listNames");
-    if (names !== null) {
+    if (names !== null && names !== "") {
       names = JSON.parse(names);
     } else {
       names = [];
     }
 
+    let foundOne = false;
     for (let i = 0; i < names.length; i++) {
       // if there is one that matches the previous name
       if (names[i] === prevState.currentName) {
         // set it to the new name
         names[i] = this.state.currentName;
-      } else {
-        // otherwise add it to the list
-        names.append(this.state.currentName);
+        foundOne = true;
       }
     }
-    localStorage.setItem("listNames", names);
+    if (!foundOne) {
+      // otherwise add it to the list
+      names.push(this.state.currentName);
+    }
+    console.log(names);
+    localStorage.setItem("listNames", JSON.stringify(names));
+
+    // also update the list of names for the dropdown selector
+    this.setState({
+      listNames: names
+    })
 
     // add in some checks to make sure it's not messing with my variables
     // maybe put "user" in front of all user defined variables
@@ -65,48 +99,94 @@ class EditPage extends Component {
     // remove the old list
     if (prevState !== undefined) localStorage.removeItem(prevState.currentName);
     // set a new list to the new name with the new values
-    localStorage.setItem(this.state.currentName, this.state.currentList);
+    localStorage.setItem(this.state.currentName, JSON.stringify(this.state.currentList));
   }
 
   handleNameChange(e) {
+    let prevState = this.state;
     this.setState({
       currentName: e.target.value
-    });
+    }, () => this.updateLocalStorage(prevState));
 
-    // update local storage
-    this.updateLocalStorage();
   }
 
   editList(newText, index) {
+    let prevState = this.state;
     this.setState(prevState => {
       let newList = prevState.currentList;
       newList[index] = newText;
       return {
         currentList: newList
       };
-    });
-
-    this.updateLocalStorage();
+    }, () => this.updateLocalStorage(prevState));
   }
 
   addItem() {
+    let prevState = this.state;
     this.setState(prevState => ({
       currentList: prevState.currentList.concat([""])
-    }));
+    }), () => this.updateLocalStorage(prevState));
 
-    this.updateLocalStorage();
   }
 
   deleteItem(index) {
+    let prevState = this.state;
     this.setState(prevState => {
       let newList = prevState.currentList;
       newList.splice(index, 1);
       return {
         currentList: newList
       };
-    });
+    }, () => this.updateLocalStorage(prevState));
 
-    this.updateLocalStorage();
+  }
+
+  deleteCurrent() {
+    // delete the list that has this.state.currentName
+    // set the current list to the list with index 0
+
+    let names = localStorage.getItem("listNames");
+    if (names !== null && names !== "") {
+      names = JSON.parse(names);
+    } else {
+      names = [];
+    }
+
+    for (let i = names.length - 1; i >= 0; i--) {
+      // if there is one that matches the previous name
+      if (names[i] === this.state.currentName) {
+        // delete it
+        names.splice(i, 1);
+        break;
+      }
+    }
+
+    localStorage.setItem("listNames", JSON.stringify(names));
+    this.setState({
+      listNames: names
+    }, () => this.handleDropDownSelect({
+      target: {
+        value: names[0]
+      }
+    }));
+
+    localStorage.setItem("recentlyDeletedItems", JSON.stringify(this.state.currentList))
+    localStorage.removeItem(this.state.currentName);
+  }
+
+  handleDropDownSelect(e) {
+    let newName = e.target.value;
+    if (newName === "addNewList" || newName === undefined) {
+      newName = "New List";
+      if (this.state.currentName === "New List") {
+        console.log("need to rename list first");
+        // display some kind of error
+      }
+    }
+
+    this.props.history.push("/edit/" + newName.replace(" ", "%20"))
+    // set the state and stuff to match the new selected one
+    this.getInfoFromURL();
   }
 
   render() {
@@ -114,10 +194,11 @@ class EditPage extends Component {
       <div>
         <div>
           <h2>Edit Different List</h2>
-          <select>
-            {this.state.currentList.map(item => (
-              <option>item</option>
+          <select value={this.state.currentName} onChange={this.handleDropDownSelect}>
+            {this.state.listNames.map(item => (
+              <option value={item}>{item}</option>
             ))}
+            <option value="addNewList">+</option>
           </select>
         </div>
         <div>
@@ -141,6 +222,8 @@ class EditPage extends Component {
         <div>
           <button onClick={this.addItem}>Add Item</button>
         </div>
+
+        <button onClick={this.deleteCurrent}>Delete List</button>
       </div>
     );
   }
