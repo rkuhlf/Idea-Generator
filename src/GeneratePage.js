@@ -39,35 +39,40 @@ class GeneratePage extends Component {
     }))
   }
 
-  handleContentEdited(newText, index) {
+  handleContentEdited(newText,) {
+    console.log(newText);
     // get the new content by the index and id
     // figure out which part of the text should be edited by splitting the same way its rendered and then using the index
-    let texts = this.state.text.split("LIST");
+    // let texts = this.state.text.split("LIST");
     // set that part to the new text
-    texts[index] = newText;
+    // texts[index] = newText;
 
     // set the state text to the list joined back together
     this.setState({
-      text: texts.join("LIST")
+      text: newText
     });
   }
 
   render() {
     let texts = this.state.text.split("LIST");
-    console.log("rerendering");
+
     return (
       <div className="generate-page">
-        <div>
+        <ContentEditable
+          onChange={e => this.handleContentEdited(e.target.value)}
+        >
           {texts.map((text, index) => (
             <div key={index} className="display-inline">
-              <ContentEditable
-                onChange={e => this.handleContentEdited(e.target.value, index)}
-                html={text}
-              />
-              {index !== texts.length - 1 ? <ListDropdown alternator={this.state.alternator}/> : null}
+              {text}
+              
+              {index !== texts.length - 1 ? (
+                <l>
+                <ListDropdown alternator={this.state.alternator}/>
+                </l>
+                ) : null}
             </div>
           ))}
-        </div>
+          </ContentEditable>
         <button onClick={this.generate}>Generate</button>
         <button onClick={this.addList}>Add</button>
       </div>

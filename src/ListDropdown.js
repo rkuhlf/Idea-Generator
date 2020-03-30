@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 
+
 // allow the user to type on a content editable thing maybe
 // but they can also hit a button (or use a keyboard shortcut) to insert a list
 // inserting the list adds a dropdown box as an inline element to the text
@@ -56,14 +57,20 @@ class ListDropdown extends Component {
   }
 
   render() {
+    console.log("trying to render");
     return (
       <div className="dropdown">
+        <div className="hidden">&beginlist&</div>
+        <span contenteditable="false">
         {this.getRandomItem()}
+        </span>
         <select value={this.state.chosen} onChange={this.handleChange}>
           {this.state.listChoices.map(name => (
             <option key={name} value={name}>{name}</option>
           ))}
+          <div className="hidden">&endlist&</div>
         </select>
+        
       </div>
     );
   }
