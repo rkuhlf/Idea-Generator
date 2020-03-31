@@ -191,7 +191,6 @@ class EditPage extends Component {
     return (
       <div className="edit-page">
         <div>
-          <h2>Edit Different List</h2>
           <select value={this.state.currentName} onChange={this.handleDropDownSelect}>
             {this.state.listNames.map(item => (
               <option value={item}>{item}</option>
@@ -220,8 +219,10 @@ class EditPage extends Component {
         <div>
           <button onClick={this.addItem}>Add Item</button>
         </div>
-
-        <button onClick={this.deleteCurrent}>Delete List</button>
+        
+        <div className="delete-container">
+          <button className="delete-button" onClick={this.deleteCurrent}>Delete List</button>
+        </div>
       </div>
     );
   }

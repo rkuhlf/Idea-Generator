@@ -1,5 +1,7 @@
 import React from "react";
 import "./styles.css";
+import "./editPage.css";
+import "./select.css";
 import { BrowserRouter as Router, Route, Switch, NavLink, Link } from "react-router-dom";
 import EditPage from "./EditPage";
 import HomePage from "./HomePage";
@@ -29,7 +31,7 @@ export default function App() {
         </Link>
         <div className="links">
           <NavLink to="/" activeClassName="selected" exact>Home</NavLink>
-          <NavLink to="/edit" activeClassName="selected">Edit</NavLink>
+          <NavLink to="/edit/new%20list" activeClassName="selected">Edit</NavLink>
           <NavLink to="/generate" activeClassName="selected">Generate</NavLink>
         </div>
       </div>

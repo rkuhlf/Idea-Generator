@@ -57,20 +57,20 @@ class ListDropdown extends Component {
   }
 
   render() {
-    console.log("trying to render");
     return (
       <div className="dropdown">
-        <div className="hidden">&beginlist&</div>
-        <span contenteditable="false">
-        {this.getRandomItem()}
-        </span>
-        <select value={this.state.chosen} onChange={this.handleChange}>
-          {this.state.listChoices.map(name => (
-            <option key={name} value={name}>{name}</option>
-          ))}
-          <div className="hidden">&endlist&</div>
-        </select>
-        
+        <div className="display-relative">
+          <div className="hidden">&beginlist&</div>
+          <span contenteditable="false">
+          {this.getRandomItem()}
+          </span>
+          <select value={this.state.chosen} onChange={this.handleChange}>
+            {this.state.listChoices.map(name => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+            <div className="hidden">&endlist&</div>
+          </select>
+        </div>
       </div>
     );
   }

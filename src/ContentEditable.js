@@ -11,109 +11,109 @@ import ReactDOMServer from "react-dom/server";
 import ErrorBoundary from "./ErrorBoundary";
 
 class ContentEditable extends Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.selfRef = React.createRef();
-    this.emitChange = this.emitChange.bind(this);
-    this.onKeyPress = this.onKeyPress.bind(this);
-    this.reactHTML = this.props.children;
-    configure({
-      ignoreEventsCondition: () => false
-    })
-  }
-
-  getCaretPosition() {
-      const element = this.selfRef.current;
-      var caretOffset = 0;
-      var doc = element.ownerDocument || element.document;
-      var win = doc.defaultView || doc.parentWindow;
-      var sel;
-      if (typeof win.getSelection != "undefined") {
-          sel = win.getSelection();
-          if (sel.rangeCount > 0) {
-              var range = win.getSelection().getRangeAt(0);
-              var preCaretRange = range.cloneRange();
-              preCaretRange.selectNodeContents(element);
-              preCaretRange.setEnd(range.endContainer, range.endOffset);
-              
-              let preCaretString = preCaretRange.toString().split(/&beginlist&.*?&endlist&/);
-              preCaretString = preCaretString.join("LIST");
-              
-              caretOffset = preCaretString.length;
-          }
-      } else if ( (sel = doc.selection) && sel.type != "Control") {
-          var textRange = sel.createRange();
-          var preCaretTextRange = doc.body.createTextRange();
-          preCaretTextRange.moveToElementText(element);
-          preCaretTextRange.setEndPoint("EndToEnd", textRange);
-          caretOffset = preCaretTextRange.text.length;
-      }
-      return caretOffset;
-  }
-
-  renderedHtmlToString(html) {
-    while (html.includes("<l>")) {
-      const startIndex = html.indexOf("<l>");
-      const endIndex = html.indexOf("</l>");
-
-      html = html.substring(0, startIndex) + "LIST" + html.substring(endIndex + 4);
+        this.selfRef = React.createRef();
+        this.emitChange = this.emitChange.bind(this);
+        this.onKeyPress = this.onKeyPress.bind(this);
+        this.reactHTML = this.props.children;
+        configure({
+            ignoreEventsCondition: () => false
+        })
     }
 
-    while (html.includes("<")) {
-      const startIndex = html.indexOf("<");
-      const endIndex = html.indexOf(">");
+    getCaretPosition() {
+        const element = this.selfRef.current;
+        var caretOffset = 0;
+        var doc = element.ownerDocument || element.document;
+        var win = doc.defaultView || doc.parentWindow;
+        var sel;
+        if (typeof win.getSelection != "undefined") {
+            sel = win.getSelection();
+            if (sel.rangeCount > 0) {
+                var range = win.getSelection().getRangeAt(0);
+                var preCaretRange = range.cloneRange();
+                preCaretRange.selectNodeContents(element);
+                preCaretRange.setEnd(range.endContainer, range.endOffset);
 
-      html = html.substring(0, startIndex) + html.substring(endIndex + 1);
-    }
+                let preCaretString = preCaretRange.toString().split(/&beginlist&.*?&endlist&/);
+                preCaretString = preCaretString.join("LIST");
 
-    return html;
-  }
-
-
-  render() {
-    const keyMap = {
-      INSERT_LIST: "ctrl+l",
-      BACKSPACE: "backspace",
-      TEST_CARET: "alt+c"
-    };
-
-    const handlers = {
-      INSERT_LIST: event => {
-        
-        const pos = this.getCaretPosition();
-        let oldHtml = this.renderedHtmlToString(this.selfRef.current.innerHTML); 
-        let newHtml = oldHtml.substring(0, pos) + "LIST" + oldHtml.substring(pos);
-        this.selfRef.current.innerHTML = newHtml;
-        this.emitChange();
-        event.preventDefault();
-      },
-      BACKSPACE: event => {
-        const pos = this.getCaretPosition();
-        
-        let currentHtml = this.renderedHtmlToString(this.selfRef.current.innerHTML);
-
-        const stuffBefore = currentHtml.substring(pos - 4, pos);
-        if (stuffBefore === "LIST") {
-          let newHtml = currentHtml.substring(0, pos - 4) + currentHtml.substring(pos);
-
-          this.selfRef.current.innerHTML = newHtml;
-          this.emitChange();
-          event.preventDefault();
+                caretOffset = preCaretString.length;
+            }
+        } else if ((sel = doc.selection) && sel.type != "Control") {
+            var textRange = sel.createRange();
+            var preCaretTextRange = doc.body.createTextRange();
+            preCaretTextRange.moveToElementText(element);
+            preCaretTextRange.setEndPoint("EndToEnd", textRange);
+            caretOffset = preCaretTextRange.text.length;
         }
-      },
-      TEST_CARET: event => {
-        
-      }
-    };
+        return caretOffset;
+    }
 
-    // store react html in string in state
-    // set innerHTML to renderToString
-    // whenever it's edited, 
+    renderedHtmlToString(html) {
+        while (html.includes("<l>")) {
+            const startIndex = html.indexOf("<l>");
+            const endIndex = html.indexOf("</l>");
 
-    // render the list in here
-    return (
-      <ErrorBoundary>
+            html = html.substring(0, startIndex) + "LIST" + html.substring(endIndex + 4);
+        }
+
+        while (html.includes("<")) {
+            const startIndex = html.indexOf("<");
+            const endIndex = html.indexOf(">");
+
+            html = html.substring(0, startIndex) + html.substring(endIndex + 1);
+        }
+
+        return html;
+    }
+
+
+    render() {
+        const keyMap = {
+            INSERT_LIST: "ctrl+l",
+            BACKSPACE: "backspace",
+            TEST_CARET: "alt+c"
+        };
+
+        const handlers = {
+            INSERT_LIST: event => {
+
+                const pos = this.getCaretPosition();
+                let oldHtml = this.renderedHtmlToString(this.selfRef.current.innerHTML);
+                let newHtml = oldHtml.substring(0, pos) + "LIST" + oldHtml.substring(pos);
+                this.selfRef.current.innerHTML = newHtml;
+                this.emitChange();
+                event.preventDefault();
+            },
+            BACKSPACE: event => {
+                const pos = this.getCaretPosition();
+
+                let currentHtml = this.renderedHtmlToString(this.selfRef.current.innerHTML);
+
+                const stuffBefore = currentHtml.substring(pos - 4, pos);
+                if (stuffBefore === "LIST") {
+                    let newHtml = currentHtml.substring(0, pos - 4) + currentHtml.substring(pos);
+
+                    this.selfRef.current.innerHTML = newHtml;
+                    this.emitChange();
+                    event.preventDefault();
+                }
+            },
+            TEST_CARET: event => {
+
+            }
+        };
+
+        // store react html in string in state
+        // set innerHTML to renderToString
+        // whenever it's edited, 
+
+        // render the list in here
+        return (
+            <ErrorBoundary>
       <div className="content-editable">
       <HotKeys keyMap={keyMap} handlers={handlers}>
         <div
@@ -127,46 +127,46 @@ class ContentEditable extends Component {
       </HotKeys>
       </div>
       </ErrorBoundary>
-    );
-  }
-
-  shouldComponentUpdate(nextProps) {
-    const newReact = nextProps.children;
-    const oldReact = this.reactHTML;
-    if (newReact.length !== oldReact.length) {
-      return true;
+        );
     }
 
-    return false;
-  }
-
-  componentDidUpdate() {
-    if (ReactDOMServer.renderToString(this.props.children) !== this.selfRef.current.innerHTML) {
-      
-      this.reactHTML = this.props.children;
-      this.selfRef.current.innerHTML = ReactDOMServer.renderToString(this.props.children);
-    }
-  }
-
-  onKeyPress(e) {
-    // 
-    // console.log(e.ctrlKey)
-  }
-
-  emitChange() {
-    var html = this.selfRef.current.innerHTML;
-
-    html = this.renderedHtmlToString(html);
-
-    if (this.props.onChange && html !== this.lastHtml) {
-      this.props.onChange({
-        target: {
-          value: html
+    shouldComponentUpdate(nextProps) {
+        const newReact = nextProps.children;
+        const oldReact = this.reactHTML;
+        if (newReact.length !== oldReact.length) {
+            return true;
         }
-      });
+
+        return false;
     }
-    this.lastHtml = html;
-  }
+
+    componentDidUpdate() {
+        console.log("updating component");
+        if (ReactDOMServer.renderToString(this.props.children) !== this.selfRef.current.innerHTML) {
+
+            this.reactHTML = this.props.children;
+            this.selfRef.current.innerHTML = ReactDOMServer.renderToString(this.props.children);
+        }
+    }
+
+    onKeyPress(e) {
+        // console.log(e.ctrlKey)
+    }
+
+    emitChange() {
+        var html = this.selfRef.current.innerHTML;
+
+        html = this.renderedHtmlToString(html); // get rid of all of the tags
+
+        if (this.props.onChange && html !== this.lastHtml) {
+            this.props.onChange({
+                target: {
+                    value: html
+                }
+            });
+        }
+        this.lastHtml = html;
+    }
 }
 
 export default ContentEditable;

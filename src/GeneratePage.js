@@ -40,7 +40,6 @@ class GeneratePage extends Component {
   }
 
   handleContentEdited(newText,) {
-    console.log(newText);
     // get the new content by the index and id
     // figure out which part of the text should be edited by splitting the same way its rendered and then using the index
     // let texts = this.state.text.split("LIST");
@@ -58,6 +57,7 @@ class GeneratePage extends Component {
 
     return (
       <div className="generate-page">
+        <div>
         <ContentEditable
           onChange={e => this.handleContentEdited(e.target.value)}
         >
@@ -73,8 +73,9 @@ class GeneratePage extends Component {
             </div>
           ))}
           </ContentEditable>
-        <button onClick={this.generate}>Generate</button>
-        <button onClick={this.addList}>Add</button>
+        </div>
+        <button className="generate-button" onClick={this.generate}>Generate</button>
+        <button className="add-button" onClick={this.addList}>Add</button>
       </div>
     );
   }
