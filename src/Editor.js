@@ -14,25 +14,28 @@ import { HotKeys, configure } from "react-hotkeys";
 class Editor extends Component {
     constructor(props) {
         super(props);
-
+        
         this.emitChange = this.emitChange.bind(this);
         configure({
             ignoreEventsCondition: () => false
         })
+
+        this.selfRef = React.createRef();
+
     }
 
     shouldComponentUpdate(nextProps){
-        return nextProps.html !== this.getDOMNode().innerHTML;
+        return nextProps.html !== this.selfRef.current.innerHTML;
     }
 
     componentDidUpdate() {
-        if ( this.props.html !== this.getDOMNode().innerHTML ) {
-           this.getDOMNode().innerHTML = this.props.html;
+        if ( this.props.html !== this.selfRef.current.innerHTML ) {
+           this.selfRef.current.innerHTML = this.props.html;
         }
     }
 
     emitChange(){
-        var html = this.getDOMNode().innerHTML;
+        var html = this.selfRef.current.innerHTML;
         if (this.props.onChange && html !== this.lastHtml) {
             this.props.onChange({
                 target: {
@@ -44,7 +47,7 @@ class Editor extends Component {
     }
 
     render() {
-        return <div id="contenteditable"
+        return <div ref={this.selfRef} id="contenteditable"
             onInput={this.emitChange} 
             onBlur={this.emitChange}
             contentEditable

@@ -54,7 +54,7 @@ class GeneratePage extends Component {
 
   handleContentEdited(newText) {
     this.setState({
-      uncompiled: newText
+      uncompiled: newText.target.value
     });
   }
 
@@ -62,7 +62,7 @@ class GeneratePage extends Component {
     return (
       <div className="generate-page">
         <div>
-          <Editor html={this.state.uncompiled} />
+          <Editor onChange={this.handleContentEdited} html={this.state.uncompiled} />
         </div>
         <div>
           <Display uncompiled={this.state.uncompiled} />
