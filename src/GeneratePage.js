@@ -33,7 +33,7 @@ class GeneratePage extends Component {
     };
 
     this.state.uncompiled =
-      "This is your sentence. (LIST) You can edit it and add a random item from the list by clicking the add button to the side or by pressing ctrl-b.";
+      "This is your sentence. @[LIST]() You can edit it and add a random item from the list by clicking the add button to the side or by pressing ctrl-b.";
 
     this.generate = this.generate.bind(this);
     this.addList = this.addList.bind(this);
