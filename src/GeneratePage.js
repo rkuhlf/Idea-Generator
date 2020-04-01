@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ListDropdown from "./ListDropdown";
-import ContentEditable from "./ContentEditable";
+import Editor from "./Editor";
+import Display from "./Display";
 
 // allow the user to type on a content editable thing maybe
 // but they can also hit a button (or use a keyboard shortcut) to insert a list
@@ -10,17 +11,29 @@ import ContentEditable from "./ContentEditable";
 
 // have a generate button and a keyboard shortcut
 
+
+// WAAAAAH NOT WORKING
+
+// make it so that the user can edit some text on the left that is then translated in to a displayed string with random lists
+
+// EXAMPLE
+// Hi this is my mother {list}(names). She is brilliant and has lots of good qualities
+// include markdown support (maybe in a later update)
+// include window support (you can hit a button to close or open the window)
+// buttons are on the left edge and right edge respectively
+
+
 class GeneratePage extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       alternator: false,
-      text: ""
+      uncompiled: ""
     };
 
-    this.state.text =
-      "This is your sentence. LIST You can edit it and add a random item from the list by clicking the add button to the side or by pressing ctrl-b.";
+    this.state.uncompiled =
+      "This is your sentence. (LIST) You can edit it and add a random item from the list by clicking the add button to the side or by pressing ctrl-b.";
 
     this.generate = this.generate.bind(this);
     this.addList = this.addList.bind(this);
@@ -39,40 +52,20 @@ class GeneratePage extends Component {
     }))
   }
 
-  handleContentEdited(newText,) {
-    // get the new content by the index and id
-    // figure out which part of the text should be edited by splitting the same way its rendered and then using the index
-    // let texts = this.state.text.split("LIST");
-    // set that part to the new text
-    // texts[index] = newText;
-
-    // set the state text to the list joined back together
+  handleContentEdited(newText) {
     this.setState({
-      text: newText
+      uncompiled: newText
     });
   }
 
   render() {
-    let texts = this.state.text.split("LIST");
-
     return (
       <div className="generate-page">
         <div>
-        <ContentEditable
-          onChange={e => this.handleContentEdited(e.target.value)}
-        >
-          {texts.map((text, index) => (
-            <div key={index} className="display-inline">
-              {text}
-              
-              {index !== texts.length - 1 ? (
-                <l>
-                <ListDropdown alternator={this.state.alternator}/>
-                </l>
-                ) : null}
-            </div>
-          ))}
-          </ContentEditable>
+          <Editor html={this.state.uncompiled} />
+        </div>
+        <div>
+          <Display uncompiled={this.state.uncompiled} />
         </div>
         <button className="generate-button" onClick={this.generate}>Generate</button>
         <button className="add-button" onClick={this.addList}>Add</button>

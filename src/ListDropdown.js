@@ -58,19 +58,20 @@ class ListDropdown extends Component {
 
   render() {
     return (
-      <div className="dropdown">
+      <div className="dropdown" contenteditable="false">
         <div className="display-relative">
           <div className="hidden">&beginlist&</div>
-          <span contenteditable="false">
+          <span>
           {this.getRandomItem()}
           </span>
           <select value={this.state.chosen} onChange={this.handleChange}>
             {this.state.listChoices.map(name => (
               <option key={name} value={name}>{name}</option>
             ))}
-            <div className="hidden">&endlist&</div>
+            
           </select>
         </div>
+        <div className="hidden">&endlist&</div>
       </div>
     );
   }
