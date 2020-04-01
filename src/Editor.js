@@ -8,15 +8,14 @@
 import React, { Component } from "react";
 import { HotKeys, configure } from "react-hotkeys";
 
+// listen for hotkey, when it comes, first add to innerHTML, then emitChange so that it doesn't update and remove cursor
+
 
 class Editor extends Component {
     constructor(props) {
         super(props);
 
-        this.selfRef = React.createRef();
         this.emitChange = this.emitChange.bind(this);
-        this.onKeyPress = this.onKeyPress.bind(this);
-        this.reactHTML = this.props.children;
         configure({
             ignoreEventsCondition: () => false
         })
