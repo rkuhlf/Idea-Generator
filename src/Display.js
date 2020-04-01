@@ -18,6 +18,7 @@ class Display extends React.Component {
 		let texts = [];
 		let lists = [];
 		let index = 0;
+		let endIndex = 0;
 
 		do {
 		    match = re.exec(text);
@@ -25,14 +26,28 @@ class Display extends React.Component {
 		    if (match) {
 		    	console.log(match);
 				index = match.index;
+				endIndex = index + match[0].length;
 		        texts.push(text.substring(0, index));
 				lists.push([match[1], match[2]])
 		    }
 		} while (match);
 
-		texts.push(text.substring(index));
+		texts.push(text.substring(endIndex));
 		
 		console.log(texts, lists);
+
+		return (
+			<div>
+				{
+					texts.map((text, index) => 
+						[
+						text,
+						index !== lists.length ? lists[index][0] : null
+						]
+					)
+				}
+			</div>
+			)
 	}
 	
 	componentWillReceiveProps(nextProps) {
@@ -46,6 +61,7 @@ class Display extends React.Component {
 	render() {
 		return (
 			<div>
+				DISPLAY
 				{this.state.compiled}
 			</div>
 			)
