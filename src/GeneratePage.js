@@ -40,6 +40,7 @@ class GeneratePage extends Component {
   }
 
   generate() {
+    console.log("switched state");
     this.setState(prevState => ({
       alternator: !prevState.alternator
     }));
@@ -48,6 +49,7 @@ class GeneratePage extends Component {
   
 
   handleContentEdited(newText) {
+    console.log("setting new uncompiled in state");
     this.setState({
       uncompiled: newText.target.value
     });

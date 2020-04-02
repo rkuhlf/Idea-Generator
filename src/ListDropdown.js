@@ -17,7 +17,8 @@ class ListDropdown extends Component {
     this.state = {
       listChoices: [],
       chosen: "",
-      listName: props.listName
+      listName: props.listName,
+      alternator: false
     };
 
     
@@ -53,9 +54,13 @@ class ListDropdown extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.alternator !== this.props.alternator) {
+    console.log("dropdown recieves props with ", nextProps.alternator);
+    console.log("state alternator is currently", this.state.alternator)
+    if (nextProps.alternator !== this.state.alternator) {
+      console.log("props different");
       this.setState({
-        chosen: this.getRandomItem(this.state.listChoices)
+        chosen: this.getRandomItem(this.state.listChoices),
+        alternator: nextProps.alternator
       })
     } if (nextProps.listName !== this.props.listName) {
       this.setState({

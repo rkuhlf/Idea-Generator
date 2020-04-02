@@ -49,6 +49,7 @@ class Editor extends Component {
     }
 
     addList() {
+        console.log("tryping to add");
         // join all previous splits from the caret position being wrong
         const caret = this.getCaretPosition();
 
@@ -64,7 +65,8 @@ class Editor extends Component {
         // make sure caret position gets fixed
         this.setCaretPosition(this.caretPos + textToAdd.length);
         // this.joinAllInner();
-
+        
+        this.emitChange();
     }
 
     joinAllInner() {
@@ -126,19 +128,32 @@ class Editor extends Component {
     }
 
     stopProp(event) {
-        event.stopPropagation();
+        // event.stopPropagation();
         event.preventDefault();
     }
 
 
     render() {
+        const keyMap = {
+          INSERT_LIST: "alt+l",
+        };
+
+        const handlers = {
+              INSERT_LIST: this.addList
+            };
+
         return (
                 <div>
-                    <div ref={this.selfRef} id="contenteditable"
-                        onInput={this.emitChange} 
-                        onBlur={this.emitChange}
-                        contentEditable
-                        dangerouslySetInnerHTML={{__html: this.props.html}}></div>
+                    <HotKeys keyMap={keyMap} handlers={handlers}>
+
+                        <div ref={this.selfRef} id="contenteditable"
+                            onInput={this.emitChange} 
+                            onBlur={this.emitChange}
+                            contentEditable
+                            dangerouslySetInnerHTML={{__html: this.props.html}}></div>
+
+                    </HotKeys>
+
                      <button className="add-button" onMouseDown={this.stopProp} onClick={this.addList}>Add</button>
                 </div>
             )
