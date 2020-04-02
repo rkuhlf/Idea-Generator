@@ -26,7 +26,6 @@ class Display extends React.Component {
 		    match = re.exec(text);
 
 		    if (match) {
-		    	console.log(match);
 				index = match.index;
 				endIndex = index + match[0].length;
 		        texts.push(text.substring(0, index));
@@ -36,7 +35,6 @@ class Display extends React.Component {
 
 		texts.push(text.substring(endIndex));
 		
-		console.log(texts, lists);
 
 		return (
 			<div>

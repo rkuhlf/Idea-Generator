@@ -36,7 +36,6 @@ class GeneratePage extends Component {
       "This is your sentence. @[LIST]() You can edit it and add a random item from the list by clicking the add button to the side or by pressing ctrl-b.";
 
     this.generate = this.generate.bind(this);
-    this.addList = this.addList.bind(this);
     this.handleContentEdited = this.handleContentEdited.bind(this);
   }
 
@@ -46,11 +45,7 @@ class GeneratePage extends Component {
     }));
   }
 
-  addList() {
-    this.setState(prevState => ({
-      text: prevState.text + "LIST"
-    }))
-  }
+  
 
   handleContentEdited(newText) {
     this.setState({
@@ -68,7 +63,6 @@ class GeneratePage extends Component {
           <Display alternator={this.state.alternator} uncompiled={this.state.uncompiled} />
         </div>
         <button className="generate-button" onClick={this.generate}>Generate</button>
-        <button className="add-button" onClick={this.addList}>Add</button>
       </div>
     );
   }
