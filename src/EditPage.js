@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { HotKeys, configure } from "react-hotkeys";
 
 
 // button somewhere to allow you to edit other lists
@@ -17,6 +18,10 @@ class EditPage extends Component {
       currentList: [],
       listNames: []
     };
+
+    configure({
+        ignoreEventsCondition: () => false
+    })
 
     this.getInfoFromURL();
 
@@ -123,8 +128,15 @@ class EditPage extends Component {
     let prevState = this.state;
     this.setState(prevState => ({
       currentList: prevState.currentList.concat([""])
-    }), () => this.updateLocalStorage(prevState));
+    }), () => {
+      this.updateLocalStorage(prevState); 
+      this.selectLastInput();
+    });
+  }
 
+  selectLastInput() {
+    let consts = document.getElementsByClassName("item-input")
+    consts[consts.length - 1].focus();
   }
 
   deleteItem(index) {
@@ -188,6 +200,14 @@ class EditPage extends Component {
   }
 
   render() {
+    const keyMap = {
+      "ADD_ITEM": "enter"
+    }
+
+    const handlers = {
+      "ADD_ITEM": this.addItem
+    }
+
     return (
       <div className="edit-page">
         <div>
@@ -205,21 +225,26 @@ class EditPage extends Component {
             value={this.state.currentName}
           />
         </div>
-        <div className="list-items">
-          {this.state.currentList.map((item, index) => (
-            <div key={index}>
-              <input
-                type="text"
-                value={this.state.currentList[index]}
-                onChange={e => this.editList(e.target.value, index)}
-              />
-              <button onClick={() => this.deleteItem(index)}>X</button>
-            </div>
-          ))}
-        </div>
+        <HotKeys keyMap={keyMap} handlers={handlers}>
+          <div className="list-items">
+            {this.state.currentList.map((item, index) => (
+              <div key={index}>
+                <input
+                  type="text"
+                  value={this.state.currentList[index]}
+                  onChange={e => this.editList(e.target.value, index)}
+                  className="item-input"
+                />
+                <button onClick={() => this.deleteItem(index)}>X</button>
+              </div>
+            ))}
+          </div>
+        </HotKeys>
+
         <div className="add-button">
           <button onClick={this.addItem}>Add Item</button>
         </div>
+        
         
         <div className="delete-container">
           <button className="delete-button" onClick={this.deleteCurrent}>Delete List</button>
