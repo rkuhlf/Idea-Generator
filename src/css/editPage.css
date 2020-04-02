@@ -1,7 +1,3 @@
-.edit-page {
-	
-}
-
 .edit-page select {
 	margin: 0 auto;
 	display: block;
@@ -11,6 +7,14 @@
 .edit-page .delete-button {
 	background-color: #f8cf6a;
 	margin-top: 40px;
+}
+
+.edit-page .delete-button:hover {
+	background-color: #ebbe50;
+}
+
+.edit-page .delete-button:active {
+	background-color: #dbad3b;
 }
 
 .delete-container {
@@ -78,4 +82,12 @@
 	height: 100%;
 	background-color: #f8cf6a;
 	margin-left: 10px;
+}
+
+.list-items button:hover {
+	background-color: #ebbe50;
+}
+
+.list-items button:active {
+	background-color: #dbad3b;
 }

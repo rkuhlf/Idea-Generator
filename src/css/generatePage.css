@@ -32,3 +32,11 @@
 .generator-container {
 	margin-left: 20px;
 }
+
+.generate-page select {
+	border: 1px solid #ccc;
+	font-weight: 500;
+	font-size: inherit;
+	color: inherit;
+	padding: 5px;
+}
