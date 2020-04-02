@@ -1,7 +1,9 @@
 import React from "react";
-import "./styles.css";
-import "./editPage.css";
-import "./select.css";
+import "./css/styles.css";
+import "./css/editPage.css";
+import "./css/select.css";
+import "./css/generatePage.css";
+import "./css/scrollbar.css";
 import { BrowserRouter as Router, Route, Switch, NavLink, Link } from "react-router-dom";
 import EditPage from "./EditPage";
 import HomePage from "./HomePage";

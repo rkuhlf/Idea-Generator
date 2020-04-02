@@ -33,7 +33,7 @@ class GeneratePage extends Component {
     };
 
     this.state.uncompiled =
-      "This is your sentence. @[LIST]() You can edit it and add a random item from the list by clicking the add button to the side or by pressing ctrl-b.";
+      "This is your sentence. @[LIST] You can edit it and add a random item from the list by clicking the add button below or by pressing alt-l. You can view the compiled idea code on the right or the bottom.";
 
     this.generate = this.generate.bind(this);
     this.handleContentEdited = this.handleContentEdited.bind(this);
@@ -49,7 +49,6 @@ class GeneratePage extends Component {
   
 
   handleContentEdited(newText) {
-    console.log("setting new uncompiled in state");
     this.setState({
       uncompiled: newText.target.value
     });
@@ -58,13 +57,17 @@ class GeneratePage extends Component {
   render() {
     return (
       <div className="generate-page">
-        <div>
+        <div className="editor-container">
+          <h2>Editor</h2>
+          <hr align="left" />
           <Editor onChange={this.handleContentEdited} html={this.state.uncompiled} />
         </div>
-        <div>
+        <div className="generator-container">
+          <h2>Generator</h2>
+          <hr align="left" />
           <Display alternator={this.state.alternator} uncompiled={this.state.uncompiled} />
+          <button className="generate-button" onClick={this.generate}>Generate</button>
         </div>
-        <button className="generate-button" onClick={this.generate}>Generate</button>
       </div>
     );
   }

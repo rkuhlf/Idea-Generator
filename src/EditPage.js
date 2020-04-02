@@ -198,25 +198,26 @@ class EditPage extends Component {
             <option value="addNewList">+</option>
           </select>
         </div>
-        <div>
-          List Name:
+        <div className="list-name-input">
           <input
             type="text"
             onChange={this.handleNameChange}
             value={this.state.currentName}
           />
         </div>
-        {this.state.currentList.map((item, index) => (
-          <div key={index}>
-            <input
-              type="text"
-              value={this.state.currentList[index]}
-              onChange={e => this.editList(e.target.value, index)}
-            />
-            <button onClick={() => this.deleteItem(index)}>Delete</button>
-          </div>
-        ))}
-        <div>
+        <div className="list-items">
+          {this.state.currentList.map((item, index) => (
+            <div key={index}>
+              <input
+                type="text"
+                value={this.state.currentList[index]}
+                onChange={e => this.editList(e.target.value, index)}
+              />
+              <button onClick={() => this.deleteItem(index)}>X</button>
+            </div>
+          ))}
+        </div>
+        <div className="add-button">
           <button onClick={this.addItem}>Add Item</button>
         </div>
         
