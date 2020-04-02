@@ -17,62 +17,66 @@ class ListDropdown extends Component {
     this.state = {
       listChoices: [],
       chosen: "",
-      chosenItems: []
+      listName: props.listName
     };
 
-    let listNames = localStorage.getItem("listNames");
-    if (listNames !== null) {
-      listNames = JSON.parse(listNames);
-      this.state.listChoices = listNames;
-      this.state.chosen = listNames[0];
-      let storedItems = localStorage.getItem(listNames[0]);
-      storedItems = JSON.parse(storedItems);
-      this.state.chosenItems = storedItems;
-    }
+    
 
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  determineChoices() {
+    let choices = localStorage.getItem(this.state.listName);
+    if (choices !== null) {
+      choices = JSON.parse(choices);
+      this.setState({
+        listChoices: choices,
+        chosen: this.getRandomItem(choices)
+      })
+    } else {
+      this.setState({
+        listName: "Not a List",
+        listChoices: [],
+        chosen: "Not a List"
+      })
+    }
   }
 
   handleChange(e) {
     let newChosen = e.target.value;
 
     this.setState(() => {
-      let storedItems = localStorage.getItem(newChosen);
-      storedItems = JSON.parse(storedItems);
-
       return {
-        chosen: newChosen,
-        chosenItems: storedItems
+        chosen: newChosen
       };
     });
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.alternator !== this.props.alternator || nextState.chosen !== this.state.chosen;
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.alternator !== this.props.alternator) {
+      this.setState({
+        chosen: this.getRandomItem(this.state.listChoices)
+      })
+    } if (nextProps.listName !== this.props.listName) {
+      this.setState({
+        listName: nextProps.listName
+      }, this.determineChoices);
+    }
   }
 
-  getRandomItem() {
-    const chosen = this.state.chosenItems;
-    return <span>{chosen[Math.floor(Math.random() * chosen.length)]}</span>;
+  getRandomItem(list) {
+    return list[Math.floor(Math.random() * list.length)];
   }
 
   render() {
     return (
-      <div className="dropdown" contenteditable="false">
-        <div className="display-relative">
-          <div className="hidden">&beginlist&</div>
-          <span>
-          {this.getRandomItem()}
-          </span>
-          <select value={this.state.chosen} onChange={this.handleChange}>
-            {this.state.listChoices.map(name => (
-              <option key={name} value={name}>{name}</option>
-            ))}
-            
-          </select>
-        </div>
-        <div className="hidden">&endlist&</div>
-      </div>
+      <select value={this.state.chosen} onChange={this.handleChange}>
+        {this.state.listChoices.map(name => (
+          <option key={name} value={name}>{name}</option>
+        ))}
+        
+      </select>
+
     );
   }
 }

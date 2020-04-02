@@ -1,18 +1,20 @@
 import React from "react";
+import ListDropdown from "./ListDropdown";
 
 class Display extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			compiled: null
+			compiled: null,
+			alternator: this.props.alternator
 		}
 
 		this.state.compiled = this.compile(props.uncompiled)
 	}
 
 	compile(text) {
-		const re = /@\[(.*?)\]\((.*?)\)/g
+		const re = /@\[(.*?)\]/g
 		let match;
 
 		let texts = [];
@@ -28,7 +30,7 @@ class Display extends React.Component {
 				index = match.index;
 				endIndex = index + match[0].length;
 		        texts.push(text.substring(0, index));
-				lists.push([match[1], match[2]])
+				lists.push(match[1])
 		    }
 		} while (match);
 
@@ -42,7 +44,7 @@ class Display extends React.Component {
 					texts.map((text, index) => 
 						[
 						text,
-						index !== lists.length ? lists[index][0] : null
+						index !== lists.length ? <ListDropdown alternator={this.state.alternator} listName={lists[index]} /> : null
 						]
 					)
 				}
@@ -56,12 +58,14 @@ class Display extends React.Component {
 	    }
 
 	    // check if alternator switched
+	    if (nextProps.alternator !== this.state.alternator) {
+	      this.setState({alternator: nextProps.alternator});
+	    }
 	  }
 
 	render() {
 		return (
 			<div>
-				DISPLAY
 				{this.state.compiled}
 			</div>
 			)

@@ -65,7 +65,7 @@ class GeneratePage extends Component {
           <Editor onChange={this.handleContentEdited} html={this.state.uncompiled} />
         </div>
         <div>
-          <Display uncompiled={this.state.uncompiled} />
+          <Display alternator={this.state.alternator} uncompiled={this.state.uncompiled} />
         </div>
         <button className="generate-button" onClick={this.generate}>Generate</button>
         <button className="add-button" onClick={this.addList}>Add</button>
